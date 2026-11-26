@@ -4,9 +4,9 @@ The AI assistant on Sonny's portfolio site: a retrieval-augmented chatbot with a
 harness, evals and tracing. It answers questions about Sonny's work from a small,
 public corpus and cites its sources.
 
-> **Status: phase 0 of 6.** The service answers from the profile text, with the
-> same request shape as the current backend, so the portfolio can switch over by
-> changing one URL. Retrieval, streaming, Qdrant and Langfuse arrive in phases 1–3.
+> **Status: phase 1 of 6.** The pipeline chunks the corpus, embeds it, indexes it
+> in Qdrant (dense + BM25 hybrid) and scores retrieval on golden questions. The
+> service still answers from the profile text; it starts retrieving in phase 2.
 
 ## How it fits together
 
@@ -35,8 +35,15 @@ backend/app/       the chat API Cloud Run runs
   tools.py           the tool registry (only listed tools can run)
   prompts/           every instruction the model gets, versioned, with a CHANGELOG
   config.py          every setting, read once from the environment
-pipeline/          corpus -> chunks -> vectors (phase 1); the Chunk model and sources.yaml today
+pipeline/          corpus -> chunks -> vectors -> Qdrant, and the retrieval eval
+  chunker.py         markdown by heading (code blocks dropped), one chunk per project
+  embedders.py       OpenAI text-embedding-3-small behind a sha256 SQLite cache
+  keywords.py        BM25 terms: Qdrant sparse vectors and the in-memory baseline
+  retrieval.py       QdrantRetriever (hybrid, RRF) and MemoryRetriever (numpy + BM25)
+  evaluate.py        hit@1, hit@5 and MRR on evals/retrieval/questions.json
 corpus/            public, redacted material only, declared in sources.yaml
+evals/retrieval/   golden questions and the pinned baseline scores
+scripts/           export_projects.mts: the portfolio's projects.ts -> corpus
 terraform/         the Google Cloud side
 .github/workflows/ ci.yml (ruff, pytest, image smoke test, terraform validate), deploy.yml
 ```
@@ -49,6 +56,34 @@ cp .env.example .env        # add OPENAI_API_KEY
 uv run uvicorn app.main:app --reload --port 8000
 uv run pytest               # no API key or network needed
 uv run chat-pipeline status # list the corpus
+```
+
+## The pipeline
+
+```bash
+uv run chat-pipeline chunks              # what each document becomes
+uv run chat-pipeline build               # embed (cached) + new Qdrant collection
+uv run chat-pipeline eval                # Qdrant and in-memory, per question
+uv run chat-pipeline search "What did Sonny do at Foodstuffs?"
+uv run chat-pipeline build --promote     # point the live alias at the new build
+uv run chat-pipeline eval --save-baseline   # pin today's scores to compare against
+```
+
+`build` needs `OPENAI_API_KEY` in `.env` (about a cent for the whole corpus;
+unchanged text is never embedded twice). Add `--embedder hash` to try every
+command offline: the scores are then meaningless, which is what the tests use.
+Without `QDRANT_URL` everything runs against a local store in `data/qdrant/`.
+
+Every build is a new collection, `portfolio-chunks-<time>`. The chatbot reads the
+alias `portfolio-chunks`, which only `--promote` moves (from phase 4, only after
+the eval gate passes), so a bad build never goes live and rollback is one alias
+switch. The newest three builds are kept.
+
+To refresh the projects after editing the portfolio:
+
+```bash
+node --experimental-strip-types scripts/export_projects.mts \
+  ../Portfolio-Sonny/src/data/projects.ts > corpus/projects/projects.json
 ```
 
 ## First deploy (once)

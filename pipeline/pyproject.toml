@@ -8,8 +8,12 @@ version = "0.1.0"
 description = "Corpus -> chunks -> vectors for the portfolio chatbot"
 requires-python = ">=3.12"
 dependencies = [
+    "numpy>=1.26",
+    "openai>=1.40",
     "pydantic>=2.7",  # the Chunk model
+    "python-dotenv>=1.0",
     "pyyaml>=6.0",    # corpus/sources.yaml
+    "qdrant-client>=1.12",
 ]
 
 [project.scripts]

@@ -12,7 +12,7 @@ __pycache__/
 !.env.example
 
 # Build outputs and caches
-data/cache/
+# data/cache/ (embedding cache) is covered by data/ below
 dist/
 build/
 
@@ -23,3 +23,6 @@ build/
 *.tfvars
 !*.tfvars.example
 crash.log
+
+# Pipeline builds: chunk bundles and the local Qdrant store
+data/
