@@ -1,0 +1,5 @@
+# Copy to terraform.tfvars (gitignored) and fill in.
+project_id      = "your-gcp-project"
+allowed_origins = "https://your-portfolio.vercel.app,http://localhost:3000"
+# firestore_project_id = "project-that-holds-the-current-leads"
+create_service  = false # true on the second apply, after the secrets have values
