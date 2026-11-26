@@ -41,8 +41,18 @@ class Settings(BaseSettings):
     pushover_token: str = ""
     pushover_user: str = ""
 
-    # Where the profile text lives. Phase 1 replaces this with the retrieval index.
+    # The short summary that is always in the prompt; everything else is retrieved.
     corpus_dir: Path = REPO_ROOT / "corpus"
+
+    # Retrieval. With QDRANT_URL set, the live alias in Qdrant Cloud; without it, the
+    # newest local build in data/builds/ (run `uv run chat-pipeline build`). The
+    # defaults are the ones the retrieval eval pinned; change them only with a sweep.
+    qdrant_url: str = ""
+    qdrant_api_key: str = ""
+    data_dir: Path = REPO_ROOT / "data"
+    retrieval_k: int = 5
+    retrieval_per_doc_max: int = 2
+    retrieval_fusion: str = "rrf"
 
     @property
     def origins(self) -> list[str]:

@@ -1,7 +1,8 @@
-"""The text the bot answers from, until retrieval arrives in phase 2.
+"""The short summary that is always in the system prompt.
 
-Only redacted, public material lives in corpus/: no phone number, personal email
-or home address, so the bot cannot repeat them.
+Everything else (CV, projects, READMEs) is retrieved per question. Only redacted,
+public material lives in corpus/: no phone number, personal email or home
+address, so the bot cannot repeat them.
 """
 
 from dataclasses import dataclass
@@ -12,7 +13,6 @@ from pathlib import Path
 class Profile:
     name: str
     summary: str
-    cv: str
 
 
 def load_profile(corpus_dir: Path, name: str = "Sonny Tapara") -> Profile:
@@ -23,4 +23,4 @@ def load_profile(corpus_dir: Path, name: str = "Sonny Tapara") -> Profile:
             return ""
         return path.read_text(encoding="utf-8")
 
-    return Profile(name=name, summary=read("profile/summary.txt"), cv=read("profile/cv.md"))
+    return Profile(name=name, summary=read("profile/summary.txt"))

@@ -26,6 +26,12 @@ variable "allowed_origins" {
   default     = "http://localhost:3000"
 }
 
+variable "qdrant_url" {
+  description = "Qdrant Cloud cluster URL (not secret; its API key is in Secret Manager)."
+  type        = string
+  default     = ""
+}
+
 variable "firestore_project_id" {
   description = "Project whose Firestore holds leads and unanswered questions. Defaults to project_id."
   type        = string

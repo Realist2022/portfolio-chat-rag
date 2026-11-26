@@ -4,9 +4,9 @@ The AI assistant on Sonny's portfolio site: a retrieval-augmented chatbot with a
 harness, evals and tracing. It answers questions about Sonny's work from a small,
 public corpus and cites its sources.
 
-> **Status: phase 1 of 6.** The pipeline chunks the corpus, embeds it, indexes it
-> in Qdrant (dense + BM25 hybrid) and scores retrieval on golden questions. The
-> service still answers from the profile text; it starts retrieving in phase 2.
+> **Status: phase 2 of 6.** The chat API retrieves the top passages for each
+> question (Qdrant hybrid search, or the newest local build), answers with [n]
+> citations and returns the sources, as JSON or streamed as server-sent events.
 
 ## How it fits together
 
@@ -18,7 +18,7 @@ Browser ─► Portfolio-Sonny on Vercel ─► /api/chat route (rate limit, CHA
                          guard in → retrieve → generate → guard out
                               │          │          │
                               │          │          └─► OpenAI chat model
-                              │          └─► Qdrant Cloud (phase 2)
+                              │          └─► Qdrant Cloud: alias portfolio-chunks
                               └─► tools: Firestore leads, Pushover alerts
 
 GitHub Actions: pipeline/ builds the index (phase 1) · CI tests · deploy.yml ships images
@@ -30,8 +30,9 @@ Terraform: Cloud Run, Artifact Registry, IAM, Secret Manager, Workload Identity
 ```
 pyproject.toml     uv workspace: backend + pipeline, one uv.lock
 backend/app/       the chat API Cloud Run runs
-  main.py            /health and /api/chat: bearer key, validation, rate limit
-  chat.py            one turn: system prompt, model call, at most 3 tool rounds
+  main.py            /health, /api/chat and /api/chat/stream: bearer key, validation, rate limit
+  chat.py            one turn: retrieve, prompt, streamed model call, tools, cited sources
+  retrieval.py       Qdrant (QDRANT_URL) or the newest local build, via the pipeline's retrievers
   tools.py           the tool registry (only listed tools can run)
   prompts/           every instruction the model gets, versioned, with a CHANGELOG
   config.py          every setting, read once from the environment
@@ -58,6 +59,12 @@ uv run pytest               # no API key or network needed
 uv run chat-pipeline status # list the corpus
 ```
 
+With no `QDRANT_URL`, the API answers from the newest build in `data/builds/`, so
+run `uv run chat-pipeline build` once first (with the same OpenAI key). Try it at
+http://localhost:8000/docs: `POST /api/chat` returns `{reply, sources}`, and
+`POST /api/chat/stream` returns server-sent events: `delta` events with the text
+as it is written, then `done` with the full reply and the sources it cited.
+
 ## The pipeline
 
 ```bash
@@ -67,6 +74,7 @@ uv run chat-pipeline eval                # Qdrant and in-memory, per question
 uv run chat-pipeline search "What did Sonny do at Foodstuffs?"
 uv run chat-pipeline build --promote     # point the live alias at the new build
 uv run chat-pipeline eval --save-baseline   # pin today's scores to compare against
+uv run chat-pipeline eval --sweep        # every fusion and per-document cap side by side
 ```
 
 `build` needs `OPENAI_API_KEY` in `.env` (about a cent for the whole corpus;
@@ -100,14 +108,18 @@ node --experimental-strip-types scripts/export_projects.mts \
    openssl rand -hex 32 | tee /dev/stderr | gcloud secrets versions add chat-api-key --data-file=-
    printf '%s' "$PUSHOVER_TOKEN" | gcloud secrets versions add pushover-token --data-file=-
    printf '%s' "$PUSHOVER_USER"  | gcloud secrets versions add pushover-user --data-file=-
+   printf '%s' "$QDRANT_API_KEY" | gcloud secrets versions add qdrant-api-key --data-file=-
    ```
    Keep the chat key: Vercel needs the same value.
 3. **The service.** Set `create_service = true` and `terraform apply` again.
 4. **Keyless deploys.** Add the repository variables `GCP_PROJECT_ID`,
    `GCP_REGION`, `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_DEPLOYER_SA` (from
    `terraform output`). From then on every merge to `main` deploys.
-5. **Vercel.** Set `CHAT_API_URL` (`terraform output service_url`) and
-   `CHAT_API_KEY`. The portfolio's `/api/chat` route arrives in phase 2.
+5. **The index.** Create a free Qdrant Cloud cluster, put `QDRANT_URL` and
+   `QDRANT_API_KEY` in your local `.env`, then `uv run chat-pipeline build --promote`.
+   Set `qdrant_url` in `terraform.tfvars` to the same URL.
+6. **Vercel.** Set `CHAT_API_URL` (`terraform output service_url`) and
+   `CHAT_API_KEY` on the portfolio; its `/api/chat` route forwards to this service.
 
 ## Plan
 

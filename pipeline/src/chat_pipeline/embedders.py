@@ -35,11 +35,15 @@ class Embedder(Protocol):
     def embed_query(self, text: str) -> list[float]: ...
 
 
+class MissingKey(RuntimeError):
+    """No OPENAI_API_KEY: an error, not an exit, so a server can report it and carry on."""
+
+
 class OpenAIEmbedder:
     def __init__(self, model: str = OPENAI_MODEL, dimensions: int = OPENAI_DIMENSIONS):
         key = (os.environ.get("OPENAI_API_KEY") or "").strip()
         if not key:
-            raise SystemExit(
+            raise MissingKey(
                 "No OPENAI_API_KEY found. Put it in .env at the repo root, or pass "
                 "--embedder hash for an offline run (meaningless scores)."
             )
@@ -135,6 +139,22 @@ class CachedEmbedder:
 
     def embed_query(self, text: str) -> list[float]:
         return self.inner.embed_query(text)  # one-off and cheap: not worth caching
+
+
+class QueryMemo:
+    """Remembers query vectors for one process, so an eval sweep embeds each question once."""
+
+    def __init__(self, inner: Embedder):
+        self.inner, self.model, self.dimensions = inner, inner.model, inner.dimensions
+        self.seen: dict[str, list[float]] = {}
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        return self.inner.embed(texts)
+
+    def embed_query(self, text: str) -> list[float]:
+        if text not in self.seen:
+            self.seen[text] = self.inner.embed_query(text)
+        return self.seen[text]
 
 
 def make_embedder(name: str, cache: Path | None) -> Embedder:

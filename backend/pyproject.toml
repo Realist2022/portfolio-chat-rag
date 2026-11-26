@@ -12,10 +12,14 @@ dependencies = [
     "uvicorn[standard]>=0.30",
     "pydantic>=2.7",
     "pydantic-settings>=2.4",  # every setting read once from the environment (app/config.py)
-    "openai>=1.40",            # chat model; embeddings join in phase 2
+    "openai>=1.40",            # chat model and query embeddings
+    "chat-pipeline",           # the retrievers: the chat runs what the eval scores
     "requests>=2.31",          # Pushover
     "firebase-admin>=6.5",     # Firestore: leads and unanswered questions
 ]
+
+[tool.uv.sources]
+chat-pipeline = { workspace = true }
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]

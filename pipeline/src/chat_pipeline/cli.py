@@ -5,6 +5,7 @@
   build    chunk, embed (cached), write a bundle and index a new Qdrant collection
   search   ask a question, print the top chunks
   eval     score retrieval on evals/retrieval/questions.json
+           (--sweep: every fusion and per-document cap side by side)
 
 --embedder openai (default) needs OPENAI_API_KEY in .env; --embedder hash runs
 offline with meaningless scores, for tests and trying the commands out.
@@ -21,8 +22,8 @@ from dotenv import load_dotenv
 from chat_pipeline import bundle as bundles
 from chat_pipeline import retrieval
 from chat_pipeline.chunker import build_chunks
-from chat_pipeline.embedders import make_embedder
-from chat_pipeline.evaluate import load_cases, report, run
+from chat_pipeline.embedders import MissingKey, QueryMemo, make_embedder
+from chat_pipeline.evaluate import load_cases, report, run, sweep_table
 from chat_pipeline.sources import load_sources
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -43,6 +44,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--retriever", choices=["qdrant", "memory", "both"], default="both")
     parser.add_argument("--promote", action="store_true", help="build: point the alias at it")
     parser.add_argument("--save-baseline", action="store_true", help="eval: pin these scores")
+    parser.add_argument("--sweep", action="store_true", help="eval: compare retrieval settings")
+    parser.add_argument("--per-doc-max", type=int, default=retrieval.PER_DOC_MAX)
+    parser.add_argument("--fusion", choices=["rrf", "dbsf"], default=retrieval.FUSION)
     parser.add_argument("-k", type=int, default=5)
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
@@ -60,23 +64,39 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{len(chunks)} chunks from {len({c.doc_id for c in chunks})} documents")
         return 0
 
-    embedder = make_embedder(args.embedder, args.data / "cache" / "embeddings.sqlite")
+    try:
+        inner = make_embedder(args.embedder, args.data / "cache" / "embeddings.sqlite")
+    except MissingKey as e:
+        print(e)
+        return 1
+    embedder = QueryMemo(inner)
     client = retrieval.qdrant_client(args.data / "qdrant")
     try:
         if args.command == "build":
             return build(args, embedder, client)
-        retrievers = pick_retrievers(args, embedder, client)
-        if args.command == "search":
-            if not args.question:
-                parser.error("search needs a question")
-            for r in retrievers:
-                print(f"== {r.name}")
-                for hit in r.search(args.question, k=args.k):
-                    print(f"  {hit.score:.3f}  {hit.chunk.id:<36} {hit.chunk.heading}")
-            return 0
-        return evaluate(args, retrievers)
+        try:
+            return query_commands(args, parser, embedder, client)
+        except retrieval.ModelMismatch as e:
+            print(f"{e} Rebuild with the same --embedder, or pass the one it was built with.")
+            return 1
     finally:
         client.close()
+
+
+def query_commands(args, parser, embedder, client) -> int:
+    """search and eval: they read an index someone already built."""
+    if args.command == "eval" and args.sweep:
+        return evaluate_sweep(args, embedder, client)
+    retrievers = pick_retrievers(args, embedder, client)
+    if args.command == "search":
+        if not args.question:
+            parser.error("search needs a question")
+        for r in retrievers:
+            print(f"== {r.name}")
+            for hit in r.search(args.question, k=args.k):
+                print(f"  {hit.score:.3f}  {hit.chunk.id:<36} {hit.chunk.heading}")
+        return 0
+    return evaluate(args, retrievers)
 
 
 def build(args, embedder, client) -> int:
@@ -115,10 +135,16 @@ def pick_retrievers(args, embedder, client) -> list[retrieval.Retriever]:
         # The live alias if set, else the newest build: eval checks a build before promotion.
         collection = retrieval.live_collection(client) if args.command == "search" else None
         collection = collection or retrieval.COLLECTION_PREFIX + folder.name
-        picked.append(retrieval.QdrantRetriever(client, collection, embedder))
+        picked.append(
+            retrieval.QdrantRetriever(client, collection, embedder, args.per_doc_max, args.fusion)
+        )
     if args.retriever in ("memory", "both"):
         chunks, vectors, manifest = bundles.load_bundle(folder)
-        picked.append(retrieval.MemoryRetriever(chunks, vectors, embedder, manifest["model"]))
+        picked.append(
+            retrieval.MemoryRetriever(
+                chunks, vectors, embedder, manifest["model"], args.per_doc_max
+            )
+        )
     return picked
 
 
@@ -126,13 +152,35 @@ def evaluate(args, retrievers) -> int:
     cases = load_cases(args.questions)
     for r in retrievers:
         result = run(r, cases)
-        path = BASELINES / f"{r.name}.json"
+        path = BASELINES / f"{r.name.split()[0]}.json"
         baseline = json.loads(path.read_text("utf-8")) if path.exists() else None
         print(report(result, baseline))
         if args.save_baseline:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(result, indent=2) + "\n", "utf-8")
             print(f"Pinned {path.relative_to(ROOT)}")
+    return 0
+
+
+def evaluate_sweep(args, embedder, client) -> int:
+    """Each fusion and per-document cap on the same questions, against the pinned baselines."""
+    folder = bundles.latest_bundle(args.data / "builds")
+    collection = retrieval.COLLECTION_PREFIX + folder.name
+    chunks, vectors, manifest = bundles.load_bundle(folder)
+    cases = load_cases(args.questions)
+    results = []
+    for cap in (2, 3):
+        for fusion in ("rrf", "dbsf"):
+            r = retrieval.QdrantRetriever(client, collection, embedder, cap, fusion)
+            results.append(run(r, cases) | {"retriever": f"qdrant {fusion} cap {cap}"})
+        r = retrieval.MemoryRetriever(chunks, vectors, embedder, manifest["model"], cap)
+        results.append(run(r, cases) | {"retriever": f"memory cap {cap}"})
+    baselines = {}
+    for name in ("qdrant", "memory"):
+        path = BASELINES / f"{name}.json"
+        if path.exists():
+            baselines[name] = json.loads(path.read_text("utf-8"))
+    print(sweep_table(results, baselines))
     return 0
 
 
