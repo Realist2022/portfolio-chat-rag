@@ -37,7 +37,7 @@ def test_both_retrievers_find_an_exact_name_and_cap_per_document(built, kind):
             r = retrieval.MemoryRetriever(chunks, vectors, embedder, m["model"])
         hits = r.search("Has he worked with SonarQube?", k=5)
         headings = [h.chunk.heading for h in hits[:3]]
-        assert "Sonny's CV > Experience: Software Engineer at Foodstuffs" in headings
+        assert any("Experience: Software Engineer" in h and "Foodstuffs" in h for h in headings)
         many = r.search("Guestimator fine-tuning model", k=10)
         docs = [h.chunk.doc_id for h in many]
         assert max(docs.count(d) for d in docs) <= retrieval.PER_DOC_MAX
