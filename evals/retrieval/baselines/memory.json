@@ -1,0 +1,343 @@
+{
+  "retriever": "memory",
+  "model": "text-embedding-3-small",
+  "cases": 37,
+  "hit@1": 0.811,
+  "hit@5": 0.973,
+  "mrr": 0.881,
+  "per_case": [
+    {
+      "id": "where-based",
+      "rank": 1,
+      "top": [
+        "profile-cv::0001",
+        "profile-about::0002",
+        "profile-about::0001"
+      ]
+    },
+    {
+      "id": "who-is-sonny",
+      "rank": 2,
+      "top": [
+        "profile-about::0002",
+        "profile-about::0000",
+        "profile-cv::0000"
+      ]
+    },
+    {
+      "id": "education",
+      "rank": 1,
+      "top": [
+        "profile-cv::0011",
+        "profile-summary::0000",
+        "profile-cv::0004"
+      ]
+    },
+    {
+      "id": "mission-ready-level",
+      "rank": 1,
+      "top": [
+        "profile-cv::0011",
+        "profile-summary::0000",
+        "profile-cv::0003"
+      ]
+    },
+    {
+      "id": "latest-job",
+      "rank": 2,
+      "top": [
+        "profile-summary::0000",
+        "profile-cv::0003",
+        "profile-cv::0004"
+      ]
+    },
+    {
+      "id": "foodstuffs-role",
+      "rank": 1,
+      "top": [
+        "profile-cv::0004",
+        "profile-summary::0000",
+        "profile-cv::0005"
+      ]
+    },
+    {
+      "id": "sonarqube",
+      "rank": 1,
+      "top": [
+        "profile-cv::0004",
+        "profile-summary::0000",
+        "profile-cv::0002"
+      ]
+    },
+    {
+      "id": "bamboo-ci",
+      "rank": 4,
+      "top": [
+        "project-foodstuffs-data-pipeline::0000",
+        "readme-cv-guestimator::0008",
+        "readme-cv-guestimator::0019"
+      ]
+    },
+    {
+      "id": "bigquery-powerbi",
+      "rank": 1,
+      "top": [
+        "profile-cv::0004",
+        "profile-cv::0002",
+        "profile-about::0001"
+      ]
+    },
+    {
+      "id": "kubernetes",
+      "rank": 1,
+      "top": [
+        "project-foodstuffs-data-pipeline::0000",
+        "profile-summary::0000",
+        "profile-cv::0004"
+      ]
+    },
+    {
+      "id": "electronics",
+      "rank": 1,
+      "top": [
+        "profile-cv::0006",
+        "project-electronic-repairs::0000",
+        "profile-summary::0000"
+      ]
+    },
+    {
+      "id": "microsoldering",
+      "rank": 1,
+      "top": [
+        "profile-cv::0006",
+        "profile-summary::0000",
+        "profile-cv::0011"
+      ]
+    },
+    {
+      "id": "console-mods",
+      "rank": 1,
+      "top": [
+        "project-electronic-repairs::0000",
+        "profile-cv::0006",
+        "profile-about::0000"
+      ]
+    },
+    {
+      "id": "hiab",
+      "rank": 1,
+      "top": [
+        "profile-cv::0005",
+        "profile-summary::0000",
+        "profile-cv::0004"
+      ]
+    },
+    {
+      "id": "snap-share",
+      "rank": 1,
+      "top": [
+        "profile-cv::0008",
+        "readme-cv-guestimator::0020",
+        "readme-cv-guestimator::0002"
+      ]
+    },
+    {
+      "id": "snapshare-limits",
+      "rank": 1,
+      "top": [
+        "profile-cv::0008",
+        "project-ai-image-recognition::0000",
+        "project-z-app-station-locator::0000"
+      ]
+    },
+    {
+      "id": "turners-chatbot",
+      "rank": 1,
+      "top": [
+        "profile-cv::0010",
+        "project-ai-chat-bot::0000",
+        "profile-about::0000"
+      ]
+    },
+    {
+      "id": "growise",
+      "rank": 1,
+      "top": [
+        "project-growise-app::0000",
+        "profile-cv::0009",
+        "project-foodstuffs-data-pipeline::0000"
+      ]
+    },
+    {
+      "id": "kumara",
+      "rank": 1,
+      "top": [
+        "project-growise-app::0000",
+        "profile-cv::0009",
+        "project-foodstuffs-data-pipeline::0000"
+      ]
+    },
+    {
+      "id": "image-recognition",
+      "rank": 1,
+      "top": [
+        "project-ai-image-recognition::0000",
+        "profile-cv::0010",
+        "profile-cv::0002"
+      ]
+    },
+    {
+      "id": "z-app",
+      "rank": 1,
+      "top": [
+        "project-z-app-station-locator::0000",
+        "project-growise-app::0000",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "interview-bot",
+      "rank": 1,
+      "top": [
+        "project-ai-chat-bot::0000",
+        "profile-cv::0010",
+        "profile-summary::0000"
+      ]
+    },
+    {
+      "id": "guestimator-what",
+      "rank": 1,
+      "top": [
+        "readme-cv-guestimator::0001",
+        "readme-cv-guestimator::0000",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "fine-tuning",
+      "rank": 1,
+      "top": [
+        "profile-cv::0007",
+        "profile-cv::0001",
+        "readme-ft-model2::0000"
+      ]
+    },
+    {
+      "id": "lora-model",
+      "rank": 1,
+      "top": [
+        "readme-ft-model2::0004",
+        "readme-ft-model2::0005",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "guestimator-pii",
+      "rank": 2,
+      "top": [
+        "readme-cv-guestimator::0000",
+        "readme-cv-guestimator::0026",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "guestimator-scoring",
+      "rank": 1,
+      "top": [
+        "readme-cv-guestimator::0023",
+        "readme-cv-guestimator::0001",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "model-fallback",
+      "rank": null,
+      "top": [
+        "readme-ft-model2::0000",
+        "readme-ft-model2::0005",
+        "readme-cv-guestimator::0014"
+      ]
+    },
+    {
+      "id": "ft-stages",
+      "rank": 1,
+      "top": [
+        "readme-ft-model2::0003",
+        "readme-ft-model2::0004",
+        "project-cv-to-job-guestimator::0000"
+      ]
+    },
+    {
+      "id": "skills-python",
+      "rank": 2,
+      "top": [
+        "profile-cv::0001",
+        "profile-about::0001",
+        "profile-cv::0002"
+      ]
+    },
+    {
+      "id": "rag-experience",
+      "rank": 1,
+      "top": [
+        "profile-cv::0002",
+        "profile-cv::0003",
+        "profile-summary::0000"
+      ]
+    },
+    {
+      "id": "values",
+      "rank": 1,
+      "top": [
+        "profile-about::0002",
+        "profile-about::0000",
+        "profile-summary::0000"
+      ]
+    },
+    {
+      "id": "hobbies",
+      "rank": 3,
+      "top": [
+        "profile-about::0000",
+        "profile-about::0002",
+        "profile-summary::0000"
+      ]
+    },
+    {
+      "id": "touch-rugby",
+      "rank": 1,
+      "top": [
+        "profile-summary::0000",
+        "profile-cv::0011",
+        "profile-cv::0003"
+      ]
+    },
+    {
+      "id": "seen-ventures",
+      "rank": 1,
+      "top": [
+        "profile-cv::0003",
+        "profile-summary::0000",
+        "profile-about::0000"
+      ]
+    },
+    {
+      "id": "guardrails",
+      "rank": 1,
+      "top": [
+        "profile-cv::0002",
+        "profile-summary::0000",
+        "profile-cv::0003"
+      ]
+    },
+    {
+      "id": "terraform",
+      "rank": 1,
+      "top": [
+        "profile-cv::0003",
+        "profile-summary::0000",
+        "profile-cv::0002"
+      ]
+    }
+  ]
+}
