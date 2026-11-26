@@ -288,6 +288,7 @@ name = "chat-backend"
 version = "0.1.0"
 source = { editable = "backend" }
 dependencies = [
+    { name = "chat-pipeline" },
     { name = "fastapi" },
     { name = "firebase-admin" },
     { name = "openai" },
@@ -299,6 +300,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "chat-pipeline", editable = "pipeline" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "firebase-admin", specifier = ">=6.5" },
     { name = "openai", specifier = ">=1.40" },

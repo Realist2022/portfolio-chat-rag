@@ -10,7 +10,8 @@ MemoryRetriever is the Toitū twin's approach, kept as a baseline: a numpy dot
 product plus weighted BM25 over the bundle. At ~60 chunks it is as good as any
 database; the point of the comparison is to show Qdrant earns its place.
 
-Both apply the same diversity rule: at most PER_DOC_MAX chunks from one document.
+Both apply the same diversity rule: at most per_doc_max chunks from one document.
+`chat-pipeline eval --sweep` compares the settings below in one run.
 """
 
 from __future__ import annotations
@@ -31,7 +32,12 @@ ALIAS = "portfolio-chunks"
 COLLECTION_PREFIX = "portfolio-chunks-"
 DENSE, SPARSE = "dense", "bm25"
 PER_DOC_MAX = 2
+FUSION = "rrf"  # Qdrant's fusion: "rrf" (by rank) or "dbsf" (by normalised score)
 KEYWORD_WEIGHT = 0.10  # the twin's measured weight; re-tune on this corpus's eval
+
+
+class ModelMismatch(ValueError):
+    """The index was built with another embedding model: its scores would be nonsense."""
 
 
 @dataclass(frozen=True)
@@ -43,6 +49,7 @@ class Hit:
 class Retriever(Protocol):
     name: str
     model: str
+    embedder: Embedder
 
     def search(self, question: str, k: int = 5) -> list[Hit]: ...
 
@@ -61,11 +68,18 @@ def diversify(hits: list[Hit], k: int, per_doc_max: int = PER_DOC_MAX) -> list[H
 
 
 class MemoryRetriever:
-    name = "memory"
-
-    def __init__(self, chunks: list[Chunk], vectors: np.ndarray, embedder: Embedder, model: str):
+    def __init__(
+        self,
+        chunks: list[Chunk],
+        vectors: np.ndarray,
+        embedder: Embedder,
+        model: str,
+        per_doc_max: int = PER_DOC_MAX,
+    ):
+        self.name = "memory" if per_doc_max == PER_DOC_MAX else f"memory cap {per_doc_max}"
+        self.per_doc_max = per_doc_max
         if embedder.model != model:
-            raise SystemExit(
+            raise ModelMismatch(
                 f"Bundle was built with {model}, but the embedder is {embedder.model}."
             )
         self.chunks, self.vectors, self.embedder, self.model = chunks, vectors, embedder, model
@@ -79,7 +93,8 @@ class MemoryRetriever:
         if bm25.max() > 0:
             scores = scores + KEYWORD_WEIGHT * bm25 / bm25.max()
         order = np.argsort(-scores)
-        return diversify([Hit(self.chunks[i], float(scores[i])) for i in order], k)
+        hits = [Hit(self.chunks[i], float(scores[i])) for i in order]
+        return diversify(hits, k, self.per_doc_max)
 
 
 def qdrant_client(local_path: Path):
@@ -162,14 +177,22 @@ def live_collection(client, alias: str = ALIAS) -> str | None:
 
 
 class QdrantRetriever:
-    name = "qdrant"
-
-    def __init__(self, client, collection: str, embedder: Embedder):
+    def __init__(
+        self,
+        client,
+        collection: str,
+        embedder: Embedder,
+        per_doc_max: int = PER_DOC_MAX,
+        fusion: str = FUSION,
+    ):
         self.client, self.collection, self.embedder = client, collection, embedder
+        self.per_doc_max, self.fusion = per_doc_max, fusion
+        defaults = (per_doc_max, fusion) == (PER_DOC_MAX, FUSION)
+        self.name = "qdrant" if defaults else f"qdrant {fusion} cap {per_doc_max}"
         meta = client.get_collection(collection).config.metadata or {}
         self.model = meta.get("model", "")
         if self.model != embedder.model:
-            raise SystemExit(
+            raise ModelMismatch(
                 f"{collection} was built with {self.model or 'an unknown model'}, "
                 f"but the embedder is {embedder.model}."
             )
@@ -186,9 +209,9 @@ class QdrantRetriever:
         result = self.client.query_points(
             self.collection,
             prefetch=prefetch,
-            query=m.FusionQuery(fusion=m.Fusion.RRF),
+            query=m.FusionQuery(fusion=m.Fusion.DBSF if self.fusion == "dbsf" else m.Fusion.RRF),
             limit=k * 4,
             with_payload=True,
         )
         hits = [Hit(Chunk(**p.payload), p.score) for p in result.points]
-        return diversify(hits, k)
+        return diversify(hits, k, self.per_doc_max)

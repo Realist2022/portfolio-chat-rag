@@ -13,6 +13,7 @@ COPY pipeline/pyproject.toml pipeline/pyproject.toml
 RUN uv sync --frozen --no-dev --package chat-backend --no-install-workspace
 
 COPY backend backend
+COPY pipeline pipeline
 COPY corpus corpus
 RUN uv sync --frozen --no-dev --package chat-backend
 

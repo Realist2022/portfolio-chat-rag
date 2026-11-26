@@ -48,7 +48,7 @@ def test_both_retrievers_find_an_exact_name_and_cap_per_document(built, kind):
 def test_a_collection_built_with_another_model_is_refused(built):
     client = retrieval.qdrant_client(built / "qdrant")
     try:
-        with pytest.raises(SystemExit, match="built with hash-bow-256"):
+        with pytest.raises(retrieval.ModelMismatch, match="built with hash-bow-256"):
             retrieval.QdrantRetriever(client, retrieval.ALIAS, HashEmbedder(dimensions=64))
     finally:
         client.close()
@@ -116,3 +116,20 @@ def test_prune_keeps_the_live_collection(tmp_path):
         assert left == {names[0], *names[3:]}
     finally:
         client.close()
+
+
+def test_sweep_compares_settings(built, capsys):
+    assert main(["eval", "--sweep", "--embedder", "hash", "--data", str(built)]) == 0
+    out = capsys.readouterr().out
+    for name in ("qdrant rrf cap 2", "qdrant dbsf cap 3", "memory cap 3"):
+        assert name in out
+
+
+def test_query_vectors_are_remembered():
+    from chat_pipeline.embedders import QueryMemo
+
+    inner = HashEmbedder()
+    memo = QueryMemo(inner)
+    memo.embed_query("q")
+    memo.embed_query("q")
+    assert len(inner.calls) == 1

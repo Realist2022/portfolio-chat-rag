@@ -84,3 +84,19 @@ def report(result: dict, baseline: dict | None = None) -> str:
         summary += f"   vs baseline: {deltas}"
     lines.append(summary)
     return "\n".join(lines)
+
+
+def sweep_table(results: list[dict], baselines: dict[str, dict]) -> str:
+    """One line per setting, plus each miss, so the best setting is easy to pick."""
+    lines = [f"{'setting':<22} {'hit@1':>6} {'hit@5':>6} {'mrr':>6}  misses (not in top 5)"]
+    for name, b in baselines.items():
+        lines.append(
+            f"{'baseline ' + name:<22} {b['hit@1']:>6.3f} {b['hit@5']:>6.3f} {b['mrr']:>6.3f}"
+        )
+    for r in results:
+        misses = [row["id"] for row in r["per_case"] if not row["rank"] or row["rank"] > 5]
+        lines.append(
+            f"{r['retriever']:<22} {r['hit@1']:>6.3f} {r['hit@5']:>6.3f} {r['mrr']:>6.3f}  "
+            + (", ".join(misses) or "-")
+        )
+    return "\n".join(lines)

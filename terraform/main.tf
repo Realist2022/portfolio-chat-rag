@@ -9,6 +9,7 @@ locals {
     CHAT_API_KEY   = "chat-api-key"
     PUSHOVER_TOKEN = "pushover-token"
     PUSHOVER_USER  = "pushover-user"
+    QDRANT_API_KEY = "qdrant-api-key"
   }
 }
 
@@ -102,6 +103,11 @@ resource "google_cloud_run_v2_service" "chat" {
       env {
         name  = "ALLOWED_ORIGINS"
         value = var.allowed_origins
+      }
+
+      env {
+        name  = "QDRANT_URL"
+        value = var.qdrant_url
       }
 
       dynamic "env" {
