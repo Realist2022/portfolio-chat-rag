@@ -1,18 +1,47 @@
 # What a human asserts about each document in the corpus. Only public, redacted
-# material goes here: no phone number, personal email or home address.
+# material goes here: no phone number, personal email or home address. Private
+# client work (the Toitū twin) never goes in.
 #
 # kind: profile | project | readme | faq
-# Phase 1 adds the projects (exported from Portfolio-Sonny's src/data/projects.ts),
-# chosen public READMEs and a faq.md.
+# A .json source of kind project is a list of projects: each one becomes its own
+# document, doc_id "<doc_id>-<slug of its title>", e.g. project-growise-app.
+# corpus/projects/projects.json is exported from Portfolio-Sonny's
+# src/data/projects.ts with scripts/export_projects.mts.
 
 sources:
   - doc_id: profile-summary
     title: Sonny's summary
     kind: profile
     path: profile/summary.txt
+    aliases: [about Sonny, overview, hobbies]
 
   - doc_id: profile-cv
-    title: Sonny's CV (redacted)
+    title: Sonny's CV
     kind: profile
-    path: profile/cv.txt
-    aliases: [resume, experience, work history]
+    path: profile/cv.md
+    aliases: [resume, experience, work history, education, skills]
+
+  - doc_id: profile-about
+    title: About Sonny (portfolio website)
+    kind: profile
+    path: profile/about.md
+    aliases: [values, what Sonny does]
+
+  - doc_id: project
+    title: Portfolio project
+    kind: project
+    path: projects/projects.json
+
+  - doc_id: readme-cv-guestimator
+    title: CV to Job Guestimator README
+    kind: readme
+    path: readmes/cv-to-job-guestimator.md
+    url: https://github.com/Realist2022/CV_to_Job_Guestimator
+    aliases: [CV matcher, job match, Guestimator]
+
+  - doc_id: readme-ft-model2
+    title: FT_MODEL2 README (fine-tuning pipeline)
+    kind: readme
+    path: readmes/ft-model2.md
+    url: https://github.com/Realist2022/FT_MODEL2
+    aliases: [fine-tuning, LoRA, Llama 3.2 3B]

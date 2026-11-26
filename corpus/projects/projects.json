@@ -1,0 +1,133 @@
+[
+  {
+    "id": 1,
+    "title": "Growise App",
+    "description": "A mobile gardening assistant that uses AI to provide precise planting schedules for edible plants like potatoes and Kūmara. Built with React Native and Firebase for full-stack mobile development.",
+    "links": [
+      {
+        "label": "Website Version",
+        "url": "https://youtu.be/13jQNGben08"
+      },
+      {
+        "label": "iOS Mobile Version",
+        "url": "https://youtube.com/shorts/Hirs7L8AYwM?feature=share"
+      }
+    ],
+    "techStack": [
+      "React Native",
+      "Firebase",
+      "Google Gemini AI",
+      "JavaScript",
+      "Mobile Development"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Foodstuffs Data Pipeline",
+    "description": "End-to-end data pipeline delivering key metric insights for Cortex scorecards and Power BI dashboards. Built in Node.js, containerised with Docker, and deployed via Kubernetes.",
+    "links": [
+      {
+        "label": "Work Experience Video",
+        "url": "https://youtu.be/mesa6q1y6Oo"
+      }
+    ],
+    "techStack": [
+      "Node.js",
+      "Docker",
+      "Kubernetes",
+      "Power BI",
+      "Google Cloud Storage",
+      "BigQuery",
+      "REST APIs"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "AI Image Recognition",
+    "description": "Azure Custom Vision project to classify images in real time. Includes dataset preparation, model training and evaluation, and a simple REST integration.",
+    "links": [
+      {
+        "label": "Demo Video",
+        "url": "https://youtu.be/D8pBg92bsQk"
+      }
+    ],
+    "techStack": [
+      "Azure",
+      "Azure Custom Vision",
+      "React",
+      "Express.js",
+      "REST APIs"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Z App — Station Locator",
+    "description": "React + Google Maps frontend with Node.js/Express APIs and MongoDB Atlas. Interactive mapping with real-time search built in a collaborative Agile workflow.",
+    "links": [],
+    "techStack": [
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Google Maps API",
+      "REST APIs",
+      "Agile"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "AI Chat Bot",
+    "description": "Custom AI chatbot for interview prep — rehearse answers, get instant feedback, and iterate. Built with React, Node.js, Express, and Google AI Studio.",
+    "links": [],
+    "techStack": [
+      "React",
+      "Node.js",
+      "Express.js",
+      "Google AI Studio",
+      "REST APIs"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Electronic Repairs",
+    "description": "Console-focused repairs and custom mods: HDMI/USB-C port replacements, power and overheating fixes, controller stick-drift repairs, SSD and cooling upgrades, and LED mods for PlayStation and Xbox.",
+    "links": [
+      {
+        "label": "PS5 Repair Video",
+        "url": "https://youtu.be/j_oQK9LvAjQ"
+      }
+    ],
+    "techStack": [
+      "Electronic Repairs",
+      "Problem Solving",
+      "Debugging"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "CV to Job Guestimator",
+    "description": "Fine-tuned Llama-3.2-3B with LoRA so three structured-extraction agents run on one small self-hosted model instead of a per-token API. Ships as a FastAPI pipeline that redacts PII, pulls the requirements out of a job listing and scores a CV against them, served either locally through Ollama or on an L4 GPU via vLLM on Modal. Wired into the chat window on this site — open it and follow the score card link.",
+    "links": [
+      {
+        "label": "Guestimator Repo",
+        "url": "https://github.com/Realist2022/CV_to_Job_Guestimator"
+      },
+      {
+        "label": "Fine-Tuning Repo",
+        "url": "https://github.com/Realist2022/FT_MODEL2"
+      }
+    ],
+    "techStack": [
+      "Python",
+      "SLM Fine-Tuning",
+      "LoRA",
+      "QLoRA",
+      "Unsloth",
+      "vLLM",
+      "Modal",
+      "FastAPI",
+      "Docker",
+      "REST APIs"
+    ]
+  }
+]

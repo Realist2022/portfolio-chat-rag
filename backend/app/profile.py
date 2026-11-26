@@ -23,4 +23,4 @@ def load_profile(corpus_dir: Path, name: str = "Sonny Tapara") -> Profile:
             return ""
         return path.read_text(encoding="utf-8")
 
-    return Profile(name=name, summary=read("profile/summary.txt"), cv=read("profile/cv.txt"))
+    return Profile(name=name, summary=read("profile/summary.txt"), cv=read("profile/cv.md"))

@@ -14,7 +14,8 @@ def test_corpus_sources_load():
 
 def test_status_runs(capsys):
     assert main(["status"]) == 0
-    assert "profile-cv" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "profile-cv" in out and "project" in out
 
 
 def test_bad_kind_is_rejected(tmp_path: Path):
