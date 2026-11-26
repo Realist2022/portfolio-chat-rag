@@ -1,0 +1,214 @@
+Sonny Tapara
+
+Software Engineer/ Full stack
+Developer
+
+Software Engineer specializing in resilient data pipelines,
+scalable REST APIs, and enterprise cloud workflows.
+Proficient in Node.js and Express.js with a foundation in
+Python, offering a proven track record of autonomous
+development, secure data transformation, and managing
+large-scale metrics across complex SaaS ecosystems.
+Contact
+
+Address: Auckland, New
+Zealand.
+LinkedIn: see the links on this website
+
+NZ citizen
+
+Education
+
+MISSION READY DIPLOMA
+
+Nov 2024 – Nov 2025
+
+Full-Stack Software
+Developer
+(Level 6 NZQA approved)
+• A comprehensive,
+accelerated
+program
+incorporating
+NZQA Levels 3, 4,
+5 and 6.
+• Included MicroCredentials in AI
+Development
+
+Experience
+
+FOODSTUFFS • July 2025 – October 2025
+
+Role: Software Engineer
+
+Engineered scalable REST API endpoints and modular data
+pipelines to extract, transform, and ingest large-scale metrics
+across enterprise platforms. Designed resilient integrations
+and cloud workflows.
+
+Key Skills:
+
+• REST API integrations:
+• SonarQube: Automated Extracting of Code
+quality metrics by integrating with sonarQube
+REST API, providing teams with real time
+insights into code health.
+• Cortex.io: Ingested and extracted data for
+scorecards and EDP.
+• Bamboo: CI/CD failed builds metrics with
+pagination and error handling.
+
+Portfolio
+
+GitHub: Repositories
+
+Live Demos:
+• Personal
+Portfolio
+Website
+
+Skills
+
+Languages:
+• HTML/CSS
+• JavaScript
+• Python
+• Typescript
+• Yaml
+
+Frontend:
+• React.js
+• React Native
+Expo
+• Next JS
+• Responsive UI
+• Power BI
+
+Backend:
+• Node.js
+• Express.js
+• Authentication
+• REST API
+• Fast API
+
+Databases:
+• MongoDB
+• MySQL/ NOSQL
+• GCP/ BigQuery
+• Google Cloud Storage:
+• Engineered a data pipeline to manage large
+scale data ingestion into Google Cloud Storage,
+ensuring data availability for analytics.
+
+• BigQuery:
+• Engineered schema transformations in
+BigQuery to deliver clean, optimized datasets
+for Power BI reporting.
+
+KEY PROJECTS
+
+SNAP & SHARE — Event Photo Sharing App (Feb 2026)
+
+• Engineered a QR/deep-link join flow that connect
+guests to an album instantly, with no account
+required
+• Architected a dual-role Firebase Auth system —
+anonymous sessions for guests persisted to device
+storage, email/password accounts for hosts —
+restoring both role and active album across app
+launches
+• Structured Firestore with a shared photos collection
+by albumId and separate per-album
+group/assignment data.
+• Implemented real-time (onSnapshot) listeners across
+the organizer and gallery views so the host sees
+uploads land live across multiple simultaneous users
+during an active event
+
+AI CAR INSURANCE CHATBOT CONSULTANT FOR
+TURNER’S POLICIES (May 2025):
+
+• Identified key customer pain points to define the
+scope and requirements for an AI insurance chatbot.
+
+• Developed an AI chatbot with Google AI Studio for
+scanning URL context data from policy web pages.
+
+• Engineered carefully crafted prompt engineering with
+extra steps in controlling the prompts, enhancing
+chatbot accuracy and relevance.
+
+• Firebase/
+Firestore
+• Vector Databases
+AI:
+• AI Engineering
+• Context
+Engineering
+• RAG workflows
+• OpenAI/ CrewAI
+
+DevOps & Cloud :
+• VS Code/ Cursor
+• Docker
+• AWS: Kubernetes
+(kubectl,
+minikube)
+• Git / GitHub
+• CI/CD pipelines
+• Vercel
+
+Project Management :
+• Agile Mindset &
+Practices
+• Jira
+• Trello
+
+Soft Skills:
+• Problem solving
+• Collaboration
+• Adaptability
+• Communication
+
+Interest and Hobbies:
+• GYM
+• Touch Rugby
+• Gardening
+• Home
+Automation
+• Kayak fishing
+• Microcontrollers
+
+ELECTRONICS REPAIR TECHNICIAN • JUL 2016 – SEPT
+
+Role: Electronics Repair Technician
+
+• Debugging: Diagnosed and repaired a wide range of
+gaming console hardware issues, including
+motherboard-level faults.
+
+Diagnostics: Specialized in microsoldering and circuitlevel diagnostics to restore non-functional components.
+
+• Problem solving: Applied precision troubleshooting
+techniques to identify and resolve complex electronic
+failures.
+
+• Skill set: Developed hands-on experience with tools such
+as hot air rework stations, multimeters, microscopes and
+micro soldering equipment.
+
+• Customer Service: Provided reliable turnaround and
+personalized service to a growing client base.
+
+CRANE AND CARTAGE • SEPT 2021 – NOV 2024
+
+Role: Hiab operator and Truck Driver
+
+• This was a diverse role involving both Hiab operation and
+truck driving. It demanded technical precision, strategic
+planning, and the ability to perform under high-pressure
+conditions. Every setup requires careful coordination and
+concentration to ensure the safety of both people and
+goods during transport and delivery.
+
+References upon request.

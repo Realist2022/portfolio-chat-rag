@@ -1,0 +1,18 @@
+# What a human asserts about each document in the corpus. Only public, redacted
+# material goes here: no phone number, personal email or home address.
+#
+# kind: profile | project | readme | faq
+# Phase 1 adds the projects (exported from Portfolio-Sonny's src/data/projects.ts),
+# chosen public READMEs and a faq.md.
+
+sources:
+  - doc_id: profile-summary
+    title: Sonny's summary
+    kind: profile
+    path: profile/summary.txt
+
+  - doc_id: profile-cv
+    title: Sonny's CV (redacted)
+    kind: profile
+    path: profile/cv.txt
+    aliases: [resume, experience, work history]

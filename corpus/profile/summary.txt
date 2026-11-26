@@ -1,0 +1,9 @@
+Sonny Tapara — Full-stack developer (Auckland, NZ citizen). Mission Ready accelerated diploma (Full-Stack Software Developer, Level 6 NZQA, Nov 2024–Nov 2025), including micro-credentials in AI development and currently studying AI Engineering.
+
+Recent work: Software Engineer at Foodstuffs (Jul–Oct 2025) — REST APIs and data pipelines for enterprise metrics (SonarQube, Cortex.io, Bamboo), plus GCS ingestion for analytics. Earlier career: electronics repair technician (hardware diagnostics, microsoldering) and Hiab operator / truck driver — strong on precision, safety, and pressure.
+
+Stack & interests: JavaScript (React, React Native Expo, Node, next.js, Express), Python, REST and auth, MongoDB/MySQL/Firebase/BigQuery/GCS. AI projects include policy chatbot work (Google AI Studio, prompt engineering) and insurance tooling (Azure Custom Vision, image upload flows). Comfortable with Docker, Kubernetes basics, AWS, Git, Agile/Jira.
+
+Focus: secure, scalable apps, modular design, and developer-friendly architecture — from backend pipelines to responsive frontends.
+
+Hobbies and interests: Gardening (Aquaponics, Hydroponics, Automated Greenhouse, Natural pest control with good bugs fighting bad bugs), Home Automation (Automating different device and sensors with Home assistant), BBQ (Low and slow charcoal bbq), Gym (Natural Bodybuilding, Sculpting with a goal to improve deadlifts and benchpress weight), Touch rugby (Played New Zealand Nationals), Kayaking and fishing.

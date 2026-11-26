@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chat-backend"
+version = "0.1.0"
+description = "The portfolio chat API: guard, retrieve, generate, guard out"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.4",  # every setting read once from the environment (app/config.py)
+    "openai>=1.40",            # chat model; embeddings join in phase 2
+    "requests>=2.31",          # Pushover
+    "firebase-admin>=6.5",     # Firestore: leads and unanswered questions
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
