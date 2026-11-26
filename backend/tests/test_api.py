@@ -245,3 +245,20 @@ def test_a_build_from_another_model_disables_retrieval_instead_of_crashing(tmp_p
     assert pipeline(["build", "--embedder", "hash", "--data", str(tmp_path)]) == 0
     cfg = settings().model_copy(update={"data_dir": tmp_path, "qdrant_url": ""})
     assert build_retriever(cfg) is None  # built with hash-bow, served with OpenAI
+
+
+def test_docs_can_be_turned_off(monkeypatch):
+    import importlib
+
+    monkeypatch.setenv("ENABLE_DOCS", "false")
+    settings.cache_clear()
+    try:
+        prod = importlib.reload(main)
+        c = TestClient(prod.app)
+        assert c.get("/docs").status_code == 404
+        assert c.get("/openapi.json").status_code == 404
+        assert c.get("/health").status_code == 200
+    finally:
+        monkeypatch.delenv("ENABLE_DOCS")
+        settings.cache_clear()
+        importlib.reload(main)

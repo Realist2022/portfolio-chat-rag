@@ -106,6 +106,11 @@ resource "google_cloud_run_v2_service" "chat" {
       }
 
       env {
+        name  = "ENABLE_DOCS"
+        value = "false"
+      }
+
+      env {
         name  = "QDRANT_URL"
         value = var.qdrant_url
       }
