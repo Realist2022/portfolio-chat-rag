@@ -1,4 +1,4 @@
-# A uv workspace with two members, shaped like the Toitū twin but in one repo:
+# A uv workspace with two members, shaped like an earlier client project but in one repo:
 #
 #   pipeline/   builds the index: corpus -> chunks -> vectors (phase 1)
 #   backend/    the FastAPI chat service Cloud Run runs; it only reads the index

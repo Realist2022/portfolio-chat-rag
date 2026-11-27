@@ -1,6 +1,6 @@
 """A build's output on disk: chunks.json, vectors.npy and manifest.json.
 
-The same shape as the Toitū twin's bundle. Qdrant is the live index; the bundle
+The same shape as an earlier client project's bundle. Qdrant is the live index; the bundle
 is the record of what went into it, and what the in-memory baseline reads.
 vectors[i] belongs to chunks[i] and every vector is L2-normalised.
 """

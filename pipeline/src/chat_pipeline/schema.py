@@ -1,6 +1,6 @@
 """The Chunk model, shared by the pipeline and (from phase 2) the backend.
 
-Adapted from the Toitū pipeline's schema: store the verbatim text to show and
+Adapted from an earlier RAG pipeline's schema: store the verbatim text to show and
 cite, embed a contextualised version with the heading and aliases in front.
 """
 

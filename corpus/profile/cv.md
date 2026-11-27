@@ -35,8 +35,8 @@ infrastructure.
 
 Seen Ventures, 7 September 2026 – 20 November 2026 (10 weeks). Role: AI Systems Engineer.
 
-- Architected and built Toitū Assist, a proof-of-concept RAG assistant for members of
-  Toitū Envirocare (a New Zealand carbon certification body) to navigate certification
+- Architected and built a proof-of-concept RAG assistant for members of a New Zealand
+  carbon certification body (client not named here), to navigate certification
   schemes, ISO 14064-1 definitions and pre-audit readiness, with cited answers from
   official documentation.
 - Designed a hybrid retrieval pipeline combining vector embeddings and BM25 with
