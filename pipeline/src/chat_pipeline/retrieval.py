@@ -6,7 +6,7 @@ fused with Reciprocal Rank Fusion. Each build is a new collection; the alias
 gate passes), so a bad build never reaches the live chatbot and rollback is one
 alias switch.
 
-MemoryRetriever is the Toitū twin's approach, kept as a baseline: a numpy dot
+MemoryRetriever is an earlier client project's approach, kept as a baseline: a numpy dot
 product plus weighted BM25 over the bundle. At ~60 chunks it is as good as any
 database; the point of the comparison is to show Qdrant earns its place.
 

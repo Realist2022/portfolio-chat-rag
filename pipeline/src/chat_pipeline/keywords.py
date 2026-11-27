@@ -1,8 +1,8 @@
 """BM25 terms, shared by Qdrant's sparse vectors and the in-memory baseline.
 
 Embeddings match meaning and are weak on exact names: "LoRA", "Cortex.io",
-"SonarQube", "Hiab". BM25 matches the literal terms. Tokenising is ported from the
-Toitū twin's keyword_index.py: lowercase, stopwords out, plural "s" folded.
+"SonarQube", "Hiab". BM25 matches the literal terms. Tokenising is ported from
+an earlier RAG project's keyword_index.py: lowercase, stopwords out, plural "s" folded.
 
 For Qdrant, each term is hashed to a sparse index and given BM25's term-frequency
 weight; the collection's IDF modifier supplies the other half of BM25 at query

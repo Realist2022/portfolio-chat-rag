@@ -1,6 +1,6 @@
 # What a human asserts about each document in the corpus. Only public, redacted
 # material goes here: no phone number, personal email or home address. Private
-# client work (the Toitū twin) never goes in.
+# client work (an earlier client project) never goes in.
 #
 # kind: profile | project | readme | faq
 # A .json source of kind project is a list of projects: each one becomes its own
