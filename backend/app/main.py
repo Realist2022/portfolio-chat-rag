@@ -26,7 +26,8 @@ from app.ratelimit import RateLimiter, client_ip
 
 cfg = settings()
 
-app = FastAPI(title="portfolio-chat-rag")
+docs = {} if cfg.enable_docs else {"docs_url": None, "redoc_url": None, "openapi_url": None}
+app = FastAPI(title="portfolio-chat-rag", **docs)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cfg.origins,

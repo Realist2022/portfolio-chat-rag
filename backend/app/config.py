@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     rate_limit: int = 20
     rate_window_seconds: int = 600
 
+    # The /docs test page and /openapi.json. Handy locally; Terraform turns them off
+    # on Cloud Run so the public service doesn't publish its own API map.
+    enable_docs: bool = True
+
     max_message_chars: int = 1000
     max_history_messages: int = 12
 
