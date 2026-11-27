@@ -1,0 +1,35 @@
+name: Qdrant keep-alive
+
+# Qdrant Cloud suspends a free cluster after a week without requests, then deletes it
+# a few weeks later. This sends one small query every 3 days so the live index stays
+# up even when nobody uses the chat. Needs repository secrets QDRANT_URL and
+# QDRANT_API_KEY (the same values as in your local .env).
+
+on:
+  schedule:
+    - cron: "17 20 */3 * *" # 20:17 UTC every 3 days (morning in NZ)
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    if: github.repository == 'Realist2022/portfolio-chat-rag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Count points through the live alias
+        env:
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: |
+          if [ -z "$QDRANT_URL" ] || [ -z "$QDRANT_API_KEY" ]; then
+            echo "::error::Add QDRANT_URL and QDRANT_API_KEY as repository secrets."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error --max-time 60 \
+            --retry 3 --retry-delay 20 --retry-all-errors \
+            -X POST "${QDRANT_URL%/}/collections/portfolio-chunks/points/count" \
+            -H "api-key: $QDRANT_API_KEY" -H "Content-Type: application/json" \
+            -d '{"exact": true}'
+          echo

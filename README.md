@@ -118,6 +118,9 @@ node --experimental-strip-types scripts/export_projects.mts \
 5. **The index.** Create a free Qdrant Cloud cluster, put `QDRANT_URL` and
    `QDRANT_API_KEY` in your local `.env`, then `uv run chat-pipeline build --promote`.
    Set `qdrant_url` in `terraform.tfvars` to the same URL.
+   Add the same two values as repository **secrets** (`QDRANT_URL`, `QDRANT_API_KEY`):
+   the `Qdrant keep-alive` workflow queries the cluster every 3 days, because Qdrant
+   suspends free clusters after a week without requests.
 6. **Vercel.** Set `CHAT_API_URL` (`terraform output service_url`) and
    `CHAT_API_KEY` on the portfolio; its `/api/chat` route forwards to this service.
 
